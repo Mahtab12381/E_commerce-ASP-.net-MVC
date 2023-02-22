@@ -1,0 +1,105 @@
+﻿@model IEnumerable<e_commerce.EF.Order>
+
+@{
+    ViewBag.Title = "OrderHistory";
+    Layout = "~/Views/Shared/_LayoutPageCustomer.cshtml";
+    int totalAmount = 0;
+}
+
+<h2>OrderHistory</h2>
+
+<table class="table">
+    <tr>
+
+        <th>
+            Product Name
+        </th>
+        <th>
+            Unit Price
+           
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            Total Amount
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+
+        <th><center>Modify Order</center></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @{
+                    foreach (var i in item.ProductOrders)
+                    {
+                       
+
+                        @i.product.Name <br />
+                    }
+                 }
+
+            </td>
+ 
+            <td>
+
+                    @{
+
+                        foreach (var i in item.ProductOrders)
+                        {
+                            @i.product.Price
+                            <br />
+                        }
+                    }
+                
+            </td>
+            <td>
+                @{
+
+                    foreach (var i in item.ProductOrders)
+                    {
+                        @i.qty<br />
+
+                    }
+                }
+            </td>
+            <td>
+                @{
+
+                    foreach (var i in item.ProductOrders)
+                    {
+                        int Amount = i.qty * i.product.Price;
+                        totalAmount = totalAmount + Amount;
+                        @Amount <br />
+                    }
+                }
+            </td>
+            <td>
+                @totalAmount
+            </td>
+            <td>
+                @{
+                    @item.Date.ToString("dd/MM/yyyy");
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteHistory", new { id = item.id }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
+
+</table>

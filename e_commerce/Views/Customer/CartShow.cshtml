@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "CartShow";
+    Layout = "~/Views/Shared/_LayoutPageCustomer.cshtml";
+    int totalAmount = 0;
+}
+
+<h2>CartShow</h2>
+@if (Model != null)
+{
+
+    <table class="table">
+        <tr>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Unit Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Total Amount
+            </th>
+            <th>
+                Date
+            </th>
+
+            <th>
+                Status
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @{
+
+                    foreach (var i in Model.ProductOrders)
+                    {
+                        @i.product.Name <br />
+
+                    }
+                }
+            </td>
+            <td>
+                @{
+
+                    foreach (var i in Model.ProductOrders)
+                    {
+                        @i.product.Price <br />
+
+                    }
+                }
+            </td>
+            <td>
+                @{
+
+                    foreach (var i in Model.ProductOrders)
+                    {
+                        @i.qty<br />
+
+                    }
+                }
+            </td>
+            <td>
+                @{
+
+                    foreach (var i in Model.ProductOrders)
+                    {
+                        int Amount = i.qty * i.product.Price;
+                        totalAmount = totalAmount + Amount;
+                        @Amount <br />
+                    }
+                }
+            </td>
+            <td>
+                @totalAmount
+            </td>
+            <td>
+                @{
+                    @Model.Date.ToString("dd/MM/yyyy");
+                }
+            </td>
+            <td>
+                @Model.Status
+            </td>
+            <td>
+                @Html.ActionLink("Place Order", "PLaceOrder", new { id = Model.id }, new { @class = "btn btn-default" }) |
+                @Html.ActionLink("Empty Cart", "EmptyCart", new { id = Model.id }, new { @class = "btn btn-default" })
+
+            </td>
+        </tr>
+
+
+    </table>
+
+
+
+}
+
