@@ -11,7 +11,8 @@ namespace e_commerce.EF
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,7 +20,7 @@ namespace e_commerce.EF
         {
             this.ProductOrders = new HashSet<ProductOrder>();
         }
-    
+        
         public int id { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }

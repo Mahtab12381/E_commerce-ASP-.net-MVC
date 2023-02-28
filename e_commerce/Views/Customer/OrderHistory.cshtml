@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "OrderHistory";
     Layout = "~/Views/Shared/_LayoutPageCustomer.cshtml";
-    int totalAmount = 0;
 }
 
 <h2>OrderHistory</h2>
@@ -79,14 +78,14 @@
 
                     foreach (var i in item.ProductOrders)
                     {
+                      
                         int Amount = i.qty * i.product.Price;
-                        totalAmount = totalAmount + Amount;
                         @Amount <br />
                     }
                 }
             </td>
             <td>
-                @totalAmount
+                @item.Amount
             </td>
             <td>
                 @{
@@ -97,9 +96,18 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.ActionLink("Delete", "DeleteHistory", new { id = item.id }, new { @class = "btn btn-default" })
+                @{
+                    if (item.Status.Equals("Order Placed"))
+                    {
+                        @Html.ActionLink("Cancel Order", "CancelOrder", new { id = item.id }, new { @class = "btn btn-default" });
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Cancel Order", "OrderHistory", new { id = item.id }, new { @class = "btn btn-default" ,@disabled="true"});
+                    }
+                }
             </td>
         </tr>
-    }
+                    }
 
 </table>

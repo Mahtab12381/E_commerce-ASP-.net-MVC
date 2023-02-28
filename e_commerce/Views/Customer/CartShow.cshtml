@@ -3,8 +3,20 @@
     Layout = "~/Views/Shared/_LayoutPageCustomer.cshtml";
     int totalAmount = 0;
 }
-
 <h2>CartShow</h2>
+@{
+    if (TempData["qtyMsg"] != null)
+    {
+        <center><label class="alert bg-success" role="alert" id="myLabel">@TempData["qtyMsg"]</label></center>
+        <script>
+            setTimeout(function () {
+                $('#myLabel').fadeOut('slow');
+            }, 1500);
+        </script>
+    }
+
+
+}
 @if (Model != null)
 {
 
@@ -42,6 +54,7 @@
 
                     foreach (var i in Model.ProductOrders)
                     {
+
                         @i.product.Name <br />
 
                     }
@@ -52,34 +65,40 @@
 
                     foreach (var i in Model.ProductOrders)
                     {
+
+
                         @i.product.Price <br />
 
                     }
                 }
             </td>
-            <td>
-                @{
 
-                    foreach (var i in Model.ProductOrders)
+            @{
+                <td>
+                    @foreach (var i in Model.ProductOrders)
                     {
-                        @i.qty<br />
-
+                        @Html.ActionLink("-  ", "DecreaseQty", new { id = i.id }, new { @style = "text-decoration:none" })
+                        @i.qty
+                        @Html.ActionLink(" +", "IncreaseQty", new { id = i.id }, new { @style = "text-decoration:none" })
+                        <br />
                     }
-                }
-            </td>
+                </td>
+            }
+
+
             <td>
                 @{
 
                     foreach (var i in Model.ProductOrders)
                     {
                         int Amount = i.qty * i.product.Price;
-                        totalAmount = totalAmount + Amount;
+
                         @Amount <br />
                     }
                 }
             </td>
             <td>
-                @totalAmount
+                @Model.Amount
             </td>
             <td>
                 @{
@@ -98,8 +117,10 @@
 
 
     </table>
-
-
-
 }
+else
+{
+   <center><h4>Cart is empty</h4></center> 
+}
+
 

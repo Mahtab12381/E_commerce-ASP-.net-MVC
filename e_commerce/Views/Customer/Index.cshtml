@@ -3,8 +3,6 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutPageCustomer.cshtml";
-    string stk;
-    string nt = "Cart not availble";
 }
 
 <h2>Index</h2>
@@ -52,14 +50,12 @@
                 @{
                     if (item.Qty > 0)
                     {
-                        stk = "In Stock";
+                         <span class="text-success"> In stock </span>
                     }
                     else
                     {
-                        stk = "Out of Stock";
-                    }
-
-                    @stk
+                           <span class="text-danger"> Out of stock </span>
+                    }    
                 }
             </td>
             <td>
@@ -70,13 +66,14 @@
                     if (item.Qty > 0)
                     {
 
-                        @Html.ActionLink("Add to Cart", "Add_to_Cart", new { id = item.id })
+                        @Html.ActionLink("Add to Cart", "Add_to_Cart", new { id = item.id }, new { @class = "btn btn-default" })
 
                     }
                     else
                     {
-                        @nt
+                        @Html.ActionLink("Add to Cart", "", new { id = item.id }, new { @class = "btn btn-default", @disabled="true" })
                     }
+
                 }
             </td>
         </tr>

@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<e_commerce.EF.Order>
 @{
     ViewBag.Title = "Index";
-    int totalAmount = 0;
 
 }
 
@@ -80,13 +79,12 @@
                     foreach (var i in item.ProductOrders)
                     {
                         int Amount = i.qty * i.product.Price;
-                        totalAmount = totalAmount + Amount;
                         @Amount <br />
                     }
                 }
             </td>
             <td>
-                @totalAmount
+                @item.Amount
             </td>
             <td>
                 @{
@@ -96,11 +94,43 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
-            <td>
-                @Html.ActionLink("Processing", "Processing", new { id = item.id }, new { @class = "btn btn-default" }) |
-                @Html.ActionLink("Delivered", "Delivered", new { id = item.id }, new { @class = "btn btn-default" }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
-            </td>
+
+
+            @if (item.Status.Equals("Cancelled"))
+            {
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
+                </td>
+            }
+
+
+            @if (item.Status.Equals("Processing"))
+            {
+                <td>
+                    @Html.ActionLink("Delivered", "Delivered", new { id = item.id }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
+                </td>
+
+            }
+
+            @if (item.Status.Equals("Order Placed"))
+            {
+                <td>
+                    @Html.ActionLink("Processing", "Processing", new { id = item.id }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delivered", "Delivered", new { id = item.id }, new { @class = "btn btn-default" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
+                </td>
+
+            }
+
+            @if (item.Status.Equals("Delivered"))
+            {
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
+                </td>
+
+            }
+
         </tr>
     }
 
