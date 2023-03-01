@@ -1,4 +1,5 @@
-﻿using e_commerce.EF;
+﻿using e_commerce.Auth;
+using e_commerce.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,10 @@ using System.Web.Mvc;
 
 namespace e_commerce.Controllers
 {
+    [AdminLogged]
     public class UserController : Controller
     {
+
         [HttpGet]
         // GET: User
         public ActionResult Index()

@@ -1,11 +1,11 @@
-﻿@model e_commerce.Models.Login
+﻿@model e_commerce.Models.AdminLogin
 
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "AdminLogin";
     Layout = "~/Views/Shared/_LayoutPageRegLogin.cshtml";
 }
 
-<h2>Login</h2>
+<h2>AdminLogin</h2>
 @{
     if (ViewBag.msg != null)
     {
@@ -25,7 +25,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Login</h4>
+        <h4>AdminLogin</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -51,6 +51,7 @@
         </div>
     </div>
 }
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

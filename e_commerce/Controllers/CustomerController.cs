@@ -1,18 +1,19 @@
-﻿using e_commerce.EF;
+﻿using e_commerce.Auth;
+using e_commerce.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
 namespace e_commerce.Controllers
 {
+    [logged]
     public class CustomerController : Controller
     {
-        public int user_id = 2002;
-
         // GET: Customer
         public ActionResult Index()
         {
@@ -21,16 +22,14 @@ namespace e_commerce.Controllers
             return View(extproduct);
         }
 
-
-
         public ActionResult Add_to_Cart(int id) {
-           
+            var extuser = (User)Session["user"];
             var db = new e_commerceEntities1();
-            var extorder = (from o in db.Orders where o.uid == user_id && o.Status.Equals("pending") select o).SingleOrDefault();
+            var extorder = (from o in db.Orders where o.uid == extuser.id && o.Status.Equals("pending") select o).SingleOrDefault();
             var extproduct = (from p in db.products where p.id == id select p).SingleOrDefault();
             if (extorder == null) {             
                 Order order = new Order();
-                order.uid = user_id;
+                order.uid = extuser.id;
                 order.Amount = 0;
                 order.Date = DateTime.Today;
                 order.Status = "pending";
@@ -38,7 +37,7 @@ namespace e_commerce.Controllers
                 db.SaveChanges();
             }
 
-            var extorder2 = (from o in db.Orders where o.uid == user_id && o.Status.Equals("pending") select o).SingleOrDefault();
+            var extorder2 = (from o in db.Orders where o.uid == extuser.id && o.Status.Equals("pending") select o).SingleOrDefault();
             ProductOrder productorder = new ProductOrder();
             var extproductorder = (from po in db.ProductOrders where po.oid== extorder2.id && po.pid== extproduct.id select po).SingleOrDefault();
             if (extproductorder == null)
@@ -65,8 +64,9 @@ namespace e_commerce.Controllers
 
         public ActionResult CartShow()
         {
+            var extuser = (User)Session["user"];
             var db = new e_commerceEntities1();
-            var extorder = (from o in db.Orders where o.uid == user_id && o.Status.Equals("pending") select o).SingleOrDefault();
+            var extorder = (from o in db.Orders where o.uid == extuser.id && o.Status.Equals("pending") select o).SingleOrDefault();
             return View(extorder);
         }
 
@@ -87,8 +87,9 @@ namespace e_commerce.Controllers
         }
         public ActionResult PlaceOrder(int id)
         {
+            var extuser = (User)Session["user"];
             var db = new e_commerceEntities1(); 
-            var extorder = (from o in db.Orders where o.uid == user_id && o.Status.Equals("pending") select o).SingleOrDefault();
+            var extorder = (from o in db.Orders where o.uid == extuser.id && o.Status.Equals("pending") select o).SingleOrDefault();
             extorder.Status = "Order Placed";
             db.SaveChanges();
             return RedirectToAction("OrderHistory");
@@ -96,8 +97,9 @@ namespace e_commerce.Controllers
 
         public ActionResult OrderHistory()
         {
+            var extuser = (User)Session["user"];
             var db = new e_commerceEntities1();
-            var extorder = (from o in db.Orders where o.uid == user_id && !o.Status.Equals("pending") select o).ToList();
+            var extorder = (from o in db.Orders where o.uid == extuser.id && !o.Status.Equals("pending") select o).ToList();
             return View(extorder);
         }
         public ActionResult CancelOrder(int id)
@@ -136,17 +138,27 @@ namespace e_commerce.Controllers
         {
             var db = new e_commerceEntities1();
             var extorderproduct = (from op in db.ProductOrders where op.id == id select op).SingleOrDefault();
-            if (extorderproduct.qty < 5)
+
+            if (extorderproduct.product.Qty>0)
             {
-                extorderproduct.qty = extorderproduct.qty + 1;
-                extorderproduct.product.Qty = extorderproduct.product.Qty - 1;
-                extorderproduct.Order.Amount = extorderproduct.Order.Amount + extorderproduct.product.Price;
-                db.SaveChanges();
+                if (extorderproduct.qty < 5)
+                {
+                    extorderproduct.qty = extorderproduct.qty + 1;
+                    extorderproduct.product.Qty = extorderproduct.product.Qty - 1;
+                    extorderproduct.Order.Amount = extorderproduct.Order.Amount + extorderproduct.product.Price;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    TempData["qtyMsg"] = "You can add max 5";
+                }
+
             }
             else
             {
-                TempData["qtyMsg"] = "You can add max 5";
+                TempData["qtyMsg"] = "Out of Stock";
             }
+           
             return RedirectToAction("CartShow");
         }
     }

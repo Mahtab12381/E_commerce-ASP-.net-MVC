@@ -6,7 +6,7 @@ using System.Web;
 
 namespace e_commerce.Models
 {
-    public class Login
+    public class AdminLogin
     {
         [Required]
         public string Email { get; set; }
