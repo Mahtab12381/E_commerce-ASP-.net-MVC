@@ -96,7 +96,7 @@
             </td>
 
 
-            @if (item.Status.Equals("Cancelled"))
+            @if (item.Status.Equals("Cancelled")|| item.Status.Equals("Cancelled by Admin"))
             {
                 <td>
                     @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
@@ -108,7 +108,7 @@
             {
                 <td>
                     @Html.ActionLink("Delivered", "Delivered", new { id = item.id }, new { @class = "btn btn-default" }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancel", "Cancel", new { id = item.id }, new { @class = "btn btn-default" })
                 </td>
 
             }
@@ -118,7 +118,7 @@
                 <td>
                     @Html.ActionLink("Processing", "Processing", new { id = item.id }, new { @class = "btn btn-default" }) |
                     @Html.ActionLink("Delivered", "Delivered", new { id = item.id }, new { @class = "btn btn-default" }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancel", "Cancel", new { id = item.id }, new { @class = "btn btn-default" })
                 </td>
 
             }
@@ -126,7 +126,7 @@
             @if (item.Status.Equals("Delivered"))
             {
                 <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Cancel", "Index", new { id = item.id }, new { @class = "btn btn-default" , @disabled = "true" })
                 </td>
 
             }

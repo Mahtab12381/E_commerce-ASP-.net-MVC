@@ -19,17 +19,32 @@ namespace e_commerce.Controllers
             return View(extorder);
         }
 
-        public ActionResult Delete(int id) {
+        public ActionResult Cancel(int id) {
             var db = new e_commerceEntities1();
             var extorder = (from o in db.Orders where o.id == id select o).SingleOrDefault();
-            db.Orders.Remove(extorder);
+            extorder.Status = "Cancelled by Admin";
             var extorder2 = (from o in db.ProductOrders where o.oid == id select o).ToList();
             foreach (var item in extorder2)
             {
-                db.ProductOrders.Remove(item);
+                var extproduct = (from p in db.products where item.pid == p.id select p).FirstOrDefault();
+                extproduct.Qty = extproduct.Qty + item.qty;
+               
             }
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public ActionResult Delete(int id)
+        {
+            var db = new e_commerceEntities1();
+             var extorder = (from o in db.Orders where o.id == id select o).SingleOrDefault();
+             db.Orders.Remove(extorder);
+             var extorder2 = (from o in db.ProductOrders where o.oid == id select o).ToList();
+             foreach (var item in extorder2)
+             {
+                 db.ProductOrders.Remove(item);
+             }
+             db.SaveChanges();
+             return RedirectToAction("Index");
         }
 
         public ActionResult Processing(int id) {
